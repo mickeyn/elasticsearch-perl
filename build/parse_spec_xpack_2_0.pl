@@ -8,7 +8,7 @@ use Path::Class;
 use Perl::Tidy;
 use JSON::XS;
 
-my @files = map { file($_) } glob '../x-plugins/watcher/rest-api-spec/api/watcher*.json';
+my @files = map { file($_) } glob '../x-plugins/elasticsearch/x-pack/*/src/test/resources/rest-api-spec/api/*.json';
 
 my ( %API, %seen, %seen_combo, %Forbidden );
 
@@ -25,8 +25,7 @@ for my $file (@files) {
 
 }
 
-
-update_module( shift(@ARGV) || 'lib/Search/Elasticsearch/Plugin/Watcher/API.pm' );
+update_module( shift(@ARGV) || 'lib/Search/Elasticsearch/Plugin/XPack/API/2_0.pm' );
 
 #===================================
 sub process {

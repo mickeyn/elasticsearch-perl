@@ -1,38 +1,16 @@
-package Search::Elasticsearch::Plugin::Watcher;
+package Search::Elasticsearch::Plugin::XPack::1_0::Watcher;
 
 use Moo;
-with 'Search::Elasticsearch::Plugin::Watcher::API';
+with 'Search::Elasticsearch::Plugin::XPack::API::1_0';
 with 'Search::Elasticsearch::Role::Client::Direct';
+use namespace::clean;
+
 __PACKAGE__->_install_api('watcher');
-
-use Search::Elasticsearch 2.00 ();
-
-our $VERSION = '2.00';
-
-#===================================
-sub _init_plugin {
-#===================================
-    my ( $class, $params ) = @_;
-
-    Moo::Role->apply_roles_to_object( $params->{client},
-        qw(Search::Elasticsearch::Plugin::Watcher::Namespace) );
-}
-
-package Search::Elasticsearch::Plugin::Watcher::Namespace;
-
-use Moo::Role;
-
-has 'watcher' => ( is => 'lazy', init_arg => undef );
-
-sub _build_watcher {
-    shift->_build_namespace('+Search::Elasticsearch::Plugin::Watcher');
-}
 
 1;
 
-__END__
 
-# ABSTRACT: Plugin providing Watcher API for Search::Elasticsearch
+# ABSTRACT: Plugin providing Watcher API for Search::Elasticsearch 1.x
 
 =head1 SYNOPSIS
 
@@ -40,7 +18,7 @@ __END__
 
     my $es = Search::Elasticsearch->new(
         nodes   => \@nodes,
-        plugins => ['Watcher']
+        plugins => ['XPack']
     );
 
     my $response = $es->watcher->info();
@@ -59,11 +37,6 @@ In other words, it can be used as follows:
     );
 
     my $response = $es->watcher->info();
-
-It works with the L<version 1.x|Search::Elasticsearch::Client::2_0::Direct>
-and L<version 2.x|Search::Elasticsearch::Client::1_0::Direct> clients, and
-can be used both in L<Search::Elasticsearch> and in
-L<Search::Elasticsearch::Async>.
 
 =head1 METHODS
 
@@ -124,8 +97,7 @@ The C<execute_watch()> method forces the execution of a previously
 registered watch.  Optional parameters may be passed in the C<body>.
 
 Query string parameters:
-    C<debug>,
-    C<master_timeout>
+    C<debug>
 
 See the L<execute_watch docs|http://www.elastic.co/guide/en/watcher/current/api-rest.html#api-rest-execute-watch>
 for more information.

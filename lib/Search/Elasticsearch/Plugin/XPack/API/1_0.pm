@@ -1,10 +1,12 @@
-package Search::Elasticsearch::Plugin::Watcher::API;
+package Search::Elasticsearch::Plugin::XPack::API::1_0;
 
 use Moo::Role;
 
 use Search::Elasticsearch::Util qw(throw);
-use Search::Elasticsearch::Util::API::QS qw(qs_init);
+use Search::Elasticsearch::Util::API::QS qw(qs_init register_qs);
 use namespace::clean;
+
+has 'api_version' => ( is => 'ro', default => '1_0' );
 
 our %API;
 
@@ -152,60 +154,5 @@ for ( values %API ) {
 
 __END__
 
-# ABSTRACT: This class contains the spec for the Elasticsearch APIs
+# ABSTRACT: This class contains the spec for the Elasticsearch XPack APIs for 1.x
 
-=head1 DESCRIPTION
-
-All of the Elasticsearch APIs are defined in this role. The example given below
-is the definition for the L<Search::Elasticsearch::Client::Direct/index()> method:
-
-    'index' => {
-        body => {
-            desc     => 'The document',
-            required => 1
-        },
-
-        doc    => '/api/index_/',
-        method => 'PUT',
-        path   => '{index}/{type}/{id|blank}',
-        qs     => [
-            'consistency', 'op_type',     'parent',  'percolate',
-            'refresh',     'replication', 'routing', 'timeout',
-            'timestamp',   'ttl',         'version', 'version_type'
-        ],
-    },
-
-
-These definitions can be used by different L<Search::Elasticsearch::Role::Client>
-implementations to provide distinct user interfaces.
-
-=head1 METHODS
-
-=head2 C<api()>
-
-    $defn = $api->api($name);
-
-The only method in this class is the C<api()> method which takes the name
-of the I<action> and returns its definition.  Actions in the
-C<indices> or C<cluster> namespace use the namespace as a prefix, eg:
-
-    $defn = $e->api('indices.create');
-    $defn = $e->api('cluster.node_stats');
-
-=head1 SEE ALSO
-
-=over
-
-=item *
-
-L<Search::Elasticsearch::Util::API::Path>
-
-=item *
-
-L<Search::Elasticsearch::Util::API::QS>
-
-=item *
-
-L<Search::Elasticsearch::Client::Direct>
-
-=back

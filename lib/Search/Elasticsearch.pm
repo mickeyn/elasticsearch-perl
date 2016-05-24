@@ -5,7 +5,7 @@ use Moo 1.003 ();
 use Search::Elasticsearch::Util qw(parse_params load_plugin);
 use namespace::clean;
 
-our $VERSION = '2.02';
+our $VERSION = '2.03';
 
 my %Default_Plugins = (
     client      => [ 'Search::Elasticsearch::Client',       '2_0::Direct' ],
@@ -32,6 +32,7 @@ sub new {
 
     $params->{cxn} ||= 'HTTPTiny';
     my $plugins = delete $params->{plugins} || [];
+    $plugins = [$plugins] unless ref $plugins eq 'ARRAY';
 
     for my $name (@Load_Order) {
         my ( $base, $default ) = @{ $Default_Plugins{$name} };
